@@ -31,7 +31,7 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto createUser(@Validated @RequestBody NewUserRequest newUserRequest) {
-        log.info("Полученное тело запроса: {}", newUserRequest.toString());
+        log.info("Полученное тело запроса на создание пользователя: {}", newUserRequest.toString());
         return userService.createUser(newUserRequest);
     }
 
@@ -39,6 +39,7 @@ public class UserController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Collection<UserDto> findAllUsers() {
+        log.info("Запрос на получение всех пользователей");
         return userService.findAllUsers();
     }
 
@@ -46,6 +47,7 @@ public class UserController {
     @GetMapping("/{userId}")
     @ResponseStatus(HttpStatus.OK)
     public UserDto findUser(@PathVariable("userId") @Min(value = 1) Long userId) {
+        log.info("Запрос на получение пользователя по id = {}", userId);
         return userService.findUser(userId);
     }
 
@@ -54,6 +56,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public UserDto updateUser(@Validated @RequestBody UpdateUserRequest updateUserRequest,
                               @PathVariable("userId") @Min(value = 1) Long userId) {
+        log.info("Полученное тело запроса на обновление пользователя: {}", updateUserRequest.toString());
         return userService.updateUser(updateUserRequest, userId);
     }
 
@@ -61,6 +64,7 @@ public class UserController {
     @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeUser(@PathVariable("userId") @Min(value = 1) Long userId) {
+        log.info("Запрос на удаление пользователя");
         userService.removeUser(userId);
     }
 

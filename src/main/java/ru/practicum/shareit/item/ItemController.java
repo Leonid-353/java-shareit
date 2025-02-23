@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.constant.Constants;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.NewItemRequest;
 import ru.practicum.shareit.item.dto.UpdateItemRequest;
@@ -31,15 +32,16 @@ public class ItemController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ItemDto createItem(@Validated @RequestBody NewItemRequest newItemRequest,
-                              @RequestHeader("X-Sharer-User-Id") @Min(value = 1) Long ownerId) {
-        log.info("Полученное тело запроса: {}", newItemRequest.toString());
+                              @RequestHeader(Constants.X_SHARER_USER_ID) @Min(value = 1) Long ownerId) {
+        log.info("Полученное тело запроса на создание вещи: {}", newItemRequest.toString());
         return itemService.createItem(newItemRequest, ownerId);
     }
 
     // Получение всех вещей владельца
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Collection<ItemDto> findAllOwnerItems(@RequestHeader("X-Sharer-User-Id") @Min(value = 1) Long ownerId) {
+    public Collection<ItemDto> findAllOwnerItems(@RequestHeader(Constants.X_SHARER_USER_ID) @Min(value = 1) Long ownerId) {
+        log.info("Запрос на получение владельцем (id = {}) всех его вещей", ownerId);
         return itemService.findAllOwnerItems(ownerId);
     }
 
@@ -47,6 +49,7 @@ public class ItemController {
     @GetMapping("/{itemId}")
     @ResponseStatus(HttpStatus.OK)
     public ItemDto findItem(@PathVariable("itemId") @Min(value = 1) Long itemId) {
+        log.info("Запрос на получение вещи по id = {}", itemId);
         return itemService.findItem(itemId);
     }
 
@@ -55,7 +58,8 @@ public class ItemController {
     @ResponseStatus(HttpStatus.OK)
     public ItemDto updateItem(@Validated @RequestBody UpdateItemRequest updateItemRequest,
                               @PathVariable("itemId") @Min(value = 1) Long itemId,
-                              @RequestHeader("X-Sharer-User-Id") @Min(value = 1) Long ownerId) {
+                              @RequestHeader(Constants.X_SHARER_USER_ID) @Min(value = 1) Long ownerId) {
+        log.info("Запрос на обновление вещи (id = {}) владельцем (id = {})", itemId, ownerId);
         return itemService.updateItem(updateItemRequest, itemId, ownerId);
     }
 
@@ -63,7 +67,8 @@ public class ItemController {
     @DeleteMapping("/{itemId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeItem(@PathVariable("itemId") @Min(value = 1) Long itemId,
-                           @RequestHeader("X-Sharer-User-Id") @Min(value = 1) Long ownerId) {
+                           @RequestHeader(Constants.X_SHARER_USER_ID) @Min(value = 1) Long ownerId) {
+        log.info("Запрос на удаление вещи (id = {}) владельцем (id = {})", itemId, ownerId);
         itemService.removeItem(itemId, ownerId);
     }
 
@@ -71,8 +76,9 @@ public class ItemController {
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
     public Collection<ItemDto> searchItemByNameOrDescription(@RequestParam String text,
-                                                             @RequestHeader("X-Sharer-User-Id")
+                                                             @RequestHeader(Constants.X_SHARER_USER_ID)
                                                              @Min(value = 1) Long userId) {
+        log.info("Запрос на поиск вещей пользователем (id = {})", userId);
         return itemService.searchItemByNameOrDescription(text, userId);
     }
 }
