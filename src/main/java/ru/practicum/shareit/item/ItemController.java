@@ -7,9 +7,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.constant.Constants;
+import ru.practicum.shareit.item.dto.ItemCommentsDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.NewItemRequest;
 import ru.practicum.shareit.item.dto.UpdateItemRequest;
+import ru.practicum.shareit.item.dto.comment.CommentDto;
+import ru.practicum.shareit.item.dto.comment.NewCommentRequest;
 
 import java.util.Collection;
 
@@ -40,7 +43,7 @@ public class ItemController {
     // Получение всех вещей владельца
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Collection<ItemDto> findAllOwnerItems(@RequestHeader(Constants.X_SHARER_USER_ID) @Min(value = 1) Long ownerId) {
+    public Collection<ItemCommentsDto> findAllOwnerItems(@RequestHeader(Constants.X_SHARER_USER_ID) @Min(value = 1) Long ownerId) {
         log.info("Запрос на получение владельцем (id = {}) всех его вещей", ownerId);
         return itemService.findAllOwnerItems(ownerId);
     }
@@ -48,9 +51,10 @@ public class ItemController {
     // Получение вещи по id
     @GetMapping("/{itemId}")
     @ResponseStatus(HttpStatus.OK)
-    public ItemDto findItem(@PathVariable("itemId") @Min(value = 1) Long itemId) {
+    public ItemCommentsDto findItem(@PathVariable("itemId") @Min(value = 1) Long itemId,
+                                    @RequestHeader(Constants.X_SHARER_USER_ID) @Min(value = 1) Long userId) {
         log.info("Запрос на получение вещи по id = {}", itemId);
-        return itemService.findItem(itemId);
+        return itemService.findItem(itemId, userId);
     }
 
     // Обновление вещи владельцем
@@ -80,5 +84,14 @@ public class ItemController {
                                                              @Min(value = 1) Long userId) {
         log.info("Запрос на поиск вещей пользователем (id = {})", userId);
         return itemService.searchItemByNameOrDescription(text, userId);
+    }
+
+    @PostMapping("/{itemId}/comment")
+    @ResponseStatus(HttpStatus.CREATED)
+    public CommentDto createdComment(@Validated @RequestBody NewCommentRequest newCommentRequest,
+                                     @PathVariable("itemId") @Min(value = 1) Long itemId,
+                                     @RequestHeader(Constants.X_SHARER_USER_ID) @Min(value = 1) Long authorId) {
+        log.info("Полученное тело запроса на создание комментария: {}", newCommentRequest.toString());
+        return itemService.createComment(newCommentRequest, itemId, authorId);
     }
 }

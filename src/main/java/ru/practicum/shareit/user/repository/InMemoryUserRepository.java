@@ -15,11 +15,10 @@ import java.util.Optional;
 
 @Slf4j
 @Repository
-public class InMemoryUserRepository implements UserRepository {
+public class InMemoryUserRepository {
 
     Map<Long, User> users = new HashMap<>();
 
-    @Override
     public User createUser(User user) {
         for (Map.Entry<Long, User> entry : users.entrySet()) {
             if (entry.getValue().getEmail().equals(user.getEmail())) {
@@ -31,12 +30,10 @@ public class InMemoryUserRepository implements UserRepository {
         return user;
     }
 
-    @Override
     public Collection<User> findAllUsers() {
         return users.values();
     }
 
-    @Override
     public Optional<User> findUser(Long userId) {
         if (!users.containsKey(userId)) {
             throw new NotFoundException(String.format("Пользователь с id = %d не найден", userId));
@@ -44,7 +41,6 @@ public class InMemoryUserRepository implements UserRepository {
         return Optional.of(users.get(userId));
     }
 
-    @Override
     public User updateUser(UpdateUserRequest updateUserRequest,
                            Long userId) {
         for (Map.Entry<Long, User> entry : users.entrySet()) {
@@ -57,7 +53,6 @@ public class InMemoryUserRepository implements UserRepository {
                 .orElseThrow();
     }
 
-    @Override
     public void removeUser(Long userId) {
         if (!users.containsKey(userId)) {
             throw new NotFoundException(String.format("Пользователь с id = %d не найден", userId));

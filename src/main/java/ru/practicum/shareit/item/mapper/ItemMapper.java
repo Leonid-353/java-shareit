@@ -3,10 +3,13 @@ package ru.practicum.shareit.item.mapper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.item.Item;
+import ru.practicum.shareit.item.dto.ItemCommentsDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.NewItemRequest;
 import ru.practicum.shareit.item.dto.UpdateItemRequest;
+import ru.practicum.shareit.item.mapper.comment.CommentMapper;
 import ru.practicum.shareit.user.User;
+import ru.practicum.shareit.user.mapper.UserMapper;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ItemMapper {
@@ -25,17 +28,35 @@ public class ItemMapper {
         dto.setId(item.getId());
         dto.setName(item.getName());
         dto.setDescription(item.getDescription());
+        dto.setOwner(UserMapper.mapToUserDto(item.getOwner()));
         dto.setAvailable(item.isAvailable());
-        dto.setRequest(item.getRequest() != null ? item.getRequest().getId() : null);
+        dto.setLastBooking(item.getLastBooking());
+        dto.setNextBooking(item.getNextBooking());
+        dto.setRequest(item.getRequestId() != null ? item.getRequestId() : null);
+
+        return dto;
+    }
+
+    public static ItemCommentsDto mapToItemCommentsDto(Item item) {
+        ItemCommentsDto dto = new ItemCommentsDto();
+        dto.setId(item.getId());
+        dto.setName(item.getName());
+        dto.setDescription(item.getDescription());
+        dto.setOwner(UserMapper.mapToUserDto(item.getOwner()));
+        dto.setAvailable(item.isAvailable());
+        dto.setLastBooking(item.getLastBooking());
+        dto.setNextBooking(item.getNextBooking());
+        dto.setComments(CommentMapper.mapToCommentsDto(item.getComments()));
+        dto.setRequest(item.getRequestId() != null ? item.getRequestId() : null);
 
         return dto;
     }
 
     public static Item updateItemFields(Item item, UpdateItemRequest request) {
-        if (request.hasName()) {
+        if (request.hasName() && !(request.getName().equals(item.getName()))) {
             item.setName(request.getName());
         }
-        if (request.hasDescription()) {
+        if (request.hasDescription() && !(request.getDescription().equals(item.getDescription()))) {
             item.setDescription(request.getDescription());
         }
         if (request.hasAvailable()) {
