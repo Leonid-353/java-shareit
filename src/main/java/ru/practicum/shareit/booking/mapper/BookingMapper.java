@@ -10,9 +10,6 @@ import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.mapper.UserMapper;
 
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
-
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BookingMapper {
     public static Booking mapToBooking(NewBookingRequest request, User user, Item item) {
