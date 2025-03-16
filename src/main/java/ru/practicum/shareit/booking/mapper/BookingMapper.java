@@ -29,15 +29,12 @@ public class BookingMapper {
     }
 
     public static BookingDto mapToBookingDto(Booking booking) {
-        DateTimeFormatter formatter = DateTimeFormatter
-                .ISO_LOCAL_DATE_TIME
-                .withZone(ZoneOffset.UTC);
 
         BookingDto dto = new BookingDto();
 
         dto.setId(booking.getId());
-        dto.setStart(formatter.format(booking.getStart()));
-        dto.setEnd(formatter.format(booking.getEnd()));
+        dto.setStart(booking.getStart());
+        dto.setEnd(booking.getEnd());
         dto.setItem(ItemMapper.mapToItemDto(booking.getItem()));
         dto.setBooker(UserMapper.mapToUserDto(booking.getBooker()));
         dto.setStatus(booking.getStatus());
