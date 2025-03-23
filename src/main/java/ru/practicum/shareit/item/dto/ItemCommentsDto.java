@@ -3,18 +3,18 @@ package ru.practicum.shareit.item.dto;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import ru.practicum.shareit.item.dto.comment.CommentDto;
 import ru.practicum.shareit.item.model.BookingDates;
 import ru.practicum.shareit.user.dto.UserDto;
 
-/**
- * TODO Sprint add-controllers.
- */
+import java.util.Set;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ItemDto {
+public class ItemCommentsDto {
     Long id;
     @NotBlank
     String name;
@@ -24,5 +24,6 @@ public class ItemDto {
     boolean available;
     BookingDates lastBooking;
     BookingDates nextBooking;
+    Set<CommentDto> comments;
     Long request;
 }

@@ -2,6 +2,7 @@ package ru.practicum.shareit.user.mapper;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import ru.practicum.shareit.exception.DuplicatedDataException;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.dto.NewUserRequest;
 import ru.practicum.shareit.user.dto.UpdateUserRequest;
@@ -27,12 +28,17 @@ public class UserMapper {
     }
 
     public static User updateUserFields(User user, UpdateUserRequest request) {
-        if (request.hasName()) {
-            user.setName(request.getName());
+        try {
+            if (request.hasName() && !(request.getName().equals(user.getName()))) {
+                user.setName(request.getName());
+            }
+            if (request.hasEmail() && !(request.getEmail().equals(user.getEmail()))) {
+                user.setEmail(request.getEmail());
+            }
+        } catch (RuntimeException e) {
+            throw new DuplicatedDataException("Этот email уже используется", e);
         }
-        if (request.hasEmail()) {
-            user.setEmail(request.getEmail());
-        }
+
 
         return user;
     }

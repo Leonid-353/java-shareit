@@ -13,25 +13,22 @@ import java.util.*;
 
 @Slf4j
 @Repository
-public class InMemoryItemRepository implements ItemRepository {
+public class InMemoryItemRepository {
 
     Map<Long, Item> items = new HashMap<>();
 
-    @Override
     public Item createItem(Item item) {
         item.setId(getNextId());
         items.put(item.getId(), item);
         return item;
     }
 
-    @Override
     public Collection<Item> findAllOwnerItems(User owner) {
         return items.values().stream()
                 .filter(item -> Objects.equals(item.getOwner(), owner))
                 .toList();
     }
 
-    @Override
     public Optional<Item> findItem(Long itemId) {
         if (!items.containsKey(itemId)) {
             throw new NotFoundException(String.format("Вещь с id = %d не найдена", itemId));
@@ -39,7 +36,6 @@ public class InMemoryItemRepository implements ItemRepository {
         return Optional.of(items.get(itemId));
     }
 
-    @Override
     public Item updateItem(UpdateItemRequest updateItemRequest,
                            Long itemId,
                            Long ownerId) {
@@ -51,7 +47,6 @@ public class InMemoryItemRepository implements ItemRepository {
                 .orElseThrow();
     }
 
-    @Override
     public void removeItem(Long itemId,
                            Long ownerId) {
         if (!Objects.equals(items.get(itemId).getOwner().getId(), ownerId)) {
@@ -60,7 +55,6 @@ public class InMemoryItemRepository implements ItemRepository {
         items.remove(itemId);
     }
 
-    @Override
     public Collection<Item> searchItemByNameOrDescription(String text,
                                                           Long userId) {
         List<Item> foundItems = new ArrayList<>();
