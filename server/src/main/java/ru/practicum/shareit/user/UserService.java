@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.exception.DuplicatedDataException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.user.dto.NewUserRequest;
 import ru.practicum.shareit.user.dto.UpdateUserRequest;
@@ -52,8 +53,16 @@ public class UserService {
                               Long userId) {
         User updatedUser = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
+        boolean check = userRepository.existsUserByEmail(updateUserRequest.getEmail());
 
-        UserMapper.updateUserFields(updatedUser, updateUserRequest);
+        if (updateUserRequest.hasName() && !(updateUserRequest.getName().equals(updatedUser.getName()))) {
+            updatedUser.setName(updateUserRequest.getName());
+        }
+        if (check) {
+            throw new DuplicatedDataException("Этот email уже используется");
+        } else if (updateUserRequest.hasEmail() && !(updateUserRequest.getEmail().equals(updatedUser.getEmail()))) {
+            updatedUser.setEmail(updateUserRequest.getEmail());
+        }
 
         userRepository.save(updatedUser);
         return UserMapper.mapToUserDto(updatedUser);

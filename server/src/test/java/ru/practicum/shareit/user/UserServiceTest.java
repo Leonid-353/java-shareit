@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.exception.DuplicatedDataException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.user.dto.NewUserRequest;
 import ru.practicum.shareit.user.dto.UpdateUserRequest;
@@ -80,6 +81,7 @@ class UserServiceTest extends BaseTestServiceContext {
         query.setParameter("userId", user.getId());
         User result = query.getSingleResult();
         UserDto expected = UserMapper.mapToUserDto(result);
+        assertEquals(result, user);
         assertEquals(expected, dto);
     }
 
@@ -110,6 +112,15 @@ class UserServiceTest extends BaseTestServiceContext {
         UpdateUserRequest updateUserRequest = TestDataUtils.createUpdateUserRequest();
 
         assertThrows(NotFoundException.class, () -> service.updateUser(updateUserRequest, Long.MAX_VALUE));
+    }
+
+    @Test
+    void updateUserDuplicateEmail() {
+        UpdateUserRequest updateUserRequest = TestDataUtils.createUpdateUserRequestDuplicateEmail();
+        User user = TestDataUtils.createUser();
+
+        assertThrows(DuplicatedDataException.class,
+                () -> service.updateUser(updateUserRequest, user.getId()));
     }
 
     // Remove user

@@ -53,6 +53,10 @@ public class TestDataUtils {
         return new UpdateUserRequest("UpdateUser", "updateUser@mail.ru");
     }
 
+    public static UpdateUserRequest createUpdateUserRequestDuplicateEmail() {
+        return new UpdateUserRequest("UpdateUser", "owner@mail.ru");
+    }
+
     // Items
     public static Item createAvailableItem() {
         return new Item(1L,
