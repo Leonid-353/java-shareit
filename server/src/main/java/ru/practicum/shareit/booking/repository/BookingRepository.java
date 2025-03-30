@@ -22,16 +22,4 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
                                                                Long itemId,
                                                                BookingStatus status,
                                                                LocalDateTime localDateTime);
-
-    @Query("SELECT EXISTS(SELECT b FROM Booking b "
-            + "LEFT JOIN b.booker u "
-            + "LEFT JOIN b.item i "
-            + "WHERE u.id = :bookerId "
-            + "AND i.id = :itemId "
-            + "AND b.status = :status "
-            + "AND b.end < :date)")
-    boolean existsWithApprovedStatus(@Param("bookerId") Long bookerId,
-                                     @Param("itemId") Long itemId,
-                                     @Param("status") BookingStatus status,
-                                     @Param("date") LocalDateTime date);
 }
