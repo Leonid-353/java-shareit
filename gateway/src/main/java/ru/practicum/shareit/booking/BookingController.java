@@ -15,7 +15,6 @@ import ru.practicum.shareit.constant.Constants;
  * TODO Sprint add-bookings.
  */
 @Slf4j
-@Validated
 @Controller
 @RequestMapping("/bookings")
 @RequiredArgsConstructor

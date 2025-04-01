@@ -18,6 +18,7 @@ import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingState;
 import ru.practicum.shareit.booking.model.BookingStatus;
+import ru.practicum.shareit.constant.Constants;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.utils.TestDataUtils;
 
@@ -71,7 +72,7 @@ class BookingControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", booker.getId()))
+                        .header(Constants.X_SHARER_USER_ID, booker.getId()))
                 .andExpect(status().isCreated())
                 .andExpect(content().json(objectMapper.writeValueAsString(dto)));
 
@@ -89,7 +90,7 @@ class BookingControllerTest {
                 .thenReturn(dto);
 
         mockMvc.perform(get("/bookings/{bookingId}", booking.getId())
-                        .header("X-Sharer-User-Id", user.getId()))
+                        .header(Constants.X_SHARER_USER_ID, user.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(dto)));
 
@@ -109,7 +110,7 @@ class BookingControllerTest {
                 .thenReturn(List.of(dto));
 
         mockMvc.perform(get("/bookings")
-                        .header("X-Sharer-User-Id", booker.getId())
+                        .header(Constants.X_SHARER_USER_ID, booker.getId())
                         .param("state", state))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(List.of(dto))));
@@ -129,7 +130,7 @@ class BookingControllerTest {
                 .thenReturn(List.of(dto));
 
         mockMvc.perform(get("/bookings/owner")
-                        .header("X-Sharer-User-Id", owner.getId())
+                        .header(Constants.X_SHARER_USER_ID, owner.getId())
                         .param("state", state))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(List.of(dto))));
@@ -150,7 +151,7 @@ class BookingControllerTest {
                 .thenReturn(dto);
 
         mockMvc.perform(patch("/bookings/{bookingId}", booking.getId())
-                        .header("X-Sharer-User-Id", owner.getId())
+                        .header(Constants.X_SHARER_USER_ID, owner.getId())
                         .param("approved", approved))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(dto)));

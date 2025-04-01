@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.practicum.shareit.constant.Constants;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.NewItemRequestDto;
 import ru.practicum.shareit.request.dto.response.ItemRequestWithResponsesDto;
@@ -70,7 +71,7 @@ class ItemRequestControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", requestor.getId()))
+                        .header(Constants.X_SHARER_USER_ID, requestor.getId()))
                 .andExpect(status().isCreated())
                 .andExpect(content().json(objectMapper.writeValueAsString(dto)));
 
@@ -88,7 +89,7 @@ class ItemRequestControllerTest {
                 .thenReturn(List.of(dto));
 
         mockMvc.perform(get("/requests")
-                        .header("X-Sharer-User-Id", requestor.getId()))
+                        .header(Constants.X_SHARER_USER_ID, requestor.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(List.of(dto))));
 
@@ -109,7 +110,7 @@ class ItemRequestControllerTest {
                 .thenReturn(dto);
 
         mockMvc.perform(get("/requests/all")
-                        .header("X-Sharer-User-Id", requestor.getId()))
+                        .header(Constants.X_SHARER_USER_ID, requestor.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(dto)));
 
@@ -127,7 +128,7 @@ class ItemRequestControllerTest {
                 .thenReturn(dto);
 
         mockMvc.perform(get("/requests/{requestId}", itemRequest.getId())
-                        .header("X-Sharer-User-Id", requestor.getId()))
+                        .header(Constants.X_SHARER_USER_ID, requestor.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(dto)));
 

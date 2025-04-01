@@ -16,7 +16,6 @@ import ru.practicum.shareit.item.dto.comment.NewCommentRequest;
  * TODO Sprint add-controllers.
  */
 @Slf4j
-@Validated
 @Controller
 @RequestMapping("/items")
 public class ItemController {

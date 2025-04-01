@@ -10,6 +10,7 @@ services:
     environment:
       - SHAREIT_SERVER_URL=http://server:9090
       - TZ=Asia/Yekaterinburg
+    restart: on-failure:10
 
   server:
     build: server
@@ -25,6 +26,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=dbuser
       - SPRING_DATASOURCE_PASSWORD=12345
       - TZ=Asia/Yekaterinburg
+    restart: on-failure:10
 
   db:
     image: postgres:16.1
@@ -43,3 +45,4 @@ services:
       timeout: 5s
       interval: 5s
       retries: 10
+    restart: on-failure:10

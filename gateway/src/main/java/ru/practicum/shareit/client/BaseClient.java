@@ -2,8 +2,10 @@ package ru.practicum.shareit.client;
 
 import org.springframework.http.*;
 import org.springframework.lang.Nullable;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
+import ru.practicum.shareit.constant.Constants;
 
 import java.util.List;
 import java.util.Map;
@@ -69,10 +71,6 @@ public class BaseClient {
         return patch(path, userId, null, null);
     }
 
-    /*protected <T> ResponseEntity<Object> patch(String path, long userId, Map<String, Object> parameters, @Nullable T body) {
-        return makeAndSendRequest(HttpMethod.PATCH, path, userId, parameters, null);
-    }*/
-
     protected <T> ResponseEntity<Object> patch(String path, long userId, T body) {
         return patch(path, userId, null, body);
     }
@@ -98,7 +96,7 @@ public class BaseClient {
 
         ResponseEntity<Object> shareitServerResponse;
         try {
-            if (parameters != null) {
+            if (!CollectionUtils.isEmpty(parameters)) {
                 shareitServerResponse = rest.exchange(path, method, requestEntity, Object.class, parameters);
             } else {
                 shareitServerResponse = rest.exchange(path, method, requestEntity, Object.class);
@@ -114,7 +112,7 @@ public class BaseClient {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
         if (userId != null) {
-            headers.set("X-Sharer-User-Id", String.valueOf(userId));
+            headers.set(Constants.X_SHARER_USER_ID, String.valueOf(userId));
         }
         return headers;
     }

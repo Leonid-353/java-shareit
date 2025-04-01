@@ -14,7 +14,6 @@ import ru.practicum.shareit.user.dto.UpdateUserRequest;
  * TODO Sprint add-controllers.
  */
 @Slf4j
-@Validated
 @Controller
 @RequestMapping(path = "/users")
 public class UserController {

@@ -14,7 +14,6 @@ import ru.practicum.shareit.request.dto.NewItemRequestDto;
  * TODO Sprint add-item-requests.
  */
 @Slf4j
-@Validated
 @Controller
 @RequestMapping(path = "/requests")
 @RequiredArgsConstructor

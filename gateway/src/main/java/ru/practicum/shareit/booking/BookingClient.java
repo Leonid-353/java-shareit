@@ -57,10 +57,14 @@ public class BookingClient extends BaseClient {
     }
 
     public ResponseEntity<Object> getBookingsForOwner(BookingState state, Long ownerId) {
-        Map<String, Object> parameters = Map.of(
-                "state", state.name()
-        );
-        return get("/owner?state={state}", ownerId, parameters);
+        if (state == null) {
+            return get("/owner?state={state}", ownerId);
+        } else {
+            Map<String, Object> parameters = Map.of(
+                    "state", state.name()
+            );
+            return get("/owner?state={state}", ownerId, parameters);
+        }
     }
 
     public ResponseEntity<Object> approvedBooking(Long bookingId, Long ownerId, Boolean approved) {
