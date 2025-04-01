@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import ru.practicum.shareit.item.dto.comment.NewCommentRequest;
  * TODO Sprint add-controllers.
  */
 @Slf4j
+@Validated
 @Controller
 @RequestMapping("/items")
 public class ItemController {
@@ -29,7 +31,7 @@ public class ItemController {
     // Создание вещи
     @PostMapping
     public ResponseEntity<Object> createItem(@RequestHeader(Constants.X_SHARER_USER_ID) @Min(value = 1) Long ownerId,
-                                             @Validated @RequestBody NewItemRequest newItemRequest) {
+                                             @Valid @RequestBody NewItemRequest newItemRequest) {
         log.info("Полученное тело запроса на создание вещи: {}", newItemRequest.toString());
         return itemClient.createItem(ownerId, newItemRequest);
     }
@@ -51,7 +53,7 @@ public class ItemController {
 
     // Обновление вещи владельцем
     @PatchMapping("/{itemId}")
-    public ResponseEntity<Object> updateItem(@Validated @RequestBody UpdateItemRequest updateItemRequest,
+    public ResponseEntity<Object> updateItem(@Valid @RequestBody UpdateItemRequest updateItemRequest,
                                              @PathVariable("itemId") @Min(value = 1) Long itemId,
                                              @RequestHeader(Constants.X_SHARER_USER_ID) @Min(value = 1) Long ownerId) {
         log.info("Запрос на обновление вещи (id = {}) владельцем (id = {})", itemId, ownerId);
@@ -76,7 +78,7 @@ public class ItemController {
     }
 
     @PostMapping("/{itemId}/comment")
-    public ResponseEntity<Object> createdComment(@Validated @RequestBody NewCommentRequest newCommentRequest,
+    public ResponseEntity<Object> createdComment(@Valid @RequestBody NewCommentRequest newCommentRequest,
                                                  @PathVariable("itemId") @Min(value = 1) Long itemId,
                                                  @RequestHeader(Constants.X_SHARER_USER_ID) @Min(value = 1) Long bookerId) {
         log.info("Полученное тело запроса на создание комментария: {}", newCommentRequest.toString());

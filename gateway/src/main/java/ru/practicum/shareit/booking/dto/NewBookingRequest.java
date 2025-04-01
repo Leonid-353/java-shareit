@@ -15,8 +15,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @BookingMinimumEndDate
 public class NewBookingRequest {
-    @NotNull
-    Long itemId;
 
     @NotNull
     @FutureOrPresent
@@ -25,6 +23,9 @@ public class NewBookingRequest {
     @NotNull
     @Future
     LocalDateTime end;
+
+    @NotNull
+    Long itemId;
 
     BookingStatus status = BookingStatus.WAITING;
 }

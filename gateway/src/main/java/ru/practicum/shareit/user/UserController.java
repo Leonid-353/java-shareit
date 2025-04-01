@@ -1,5 +1,6 @@
 package ru.practicum.shareit.user;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import ru.practicum.shareit.user.dto.UpdateUserRequest;
  * TODO Sprint add-controllers.
  */
 @Slf4j
+@Validated
 @Controller
 @RequestMapping(path = "/users")
 public class UserController {
@@ -26,7 +28,7 @@ public class UserController {
 
     // Создание пользователя
     @PostMapping
-    public ResponseEntity<Object> createUser(@Validated @RequestBody NewUserRequest newUserRequest) {
+    public ResponseEntity<Object> createUser(@Valid @RequestBody NewUserRequest newUserRequest) {
         log.info("Полученное тело запроса на создание пользователя: {}", newUserRequest.toString());
         return userClient.createUser(newUserRequest);
     }
@@ -47,7 +49,7 @@ public class UserController {
 
     // Обновление пользователя
     @PatchMapping("/{userId}")
-    public ResponseEntity<Object> updateUser(@Validated @RequestBody UpdateUserRequest updateUserRequest,
+    public ResponseEntity<Object> updateUser(@Valid @RequestBody UpdateUserRequest updateUserRequest,
                                              @PathVariable("userId") @Min(value = 1) Long userId) {
         log.info("Полученное тело запроса на обновление пользователя: {}", updateUserRequest.toString());
         return userClient.updateUser(updateUserRequest, userId);

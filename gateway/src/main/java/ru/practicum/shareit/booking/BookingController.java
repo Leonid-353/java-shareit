@@ -1,5 +1,6 @@
 package ru.practicum.shareit.booking;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import ru.practicum.shareit.constant.Constants;
  * TODO Sprint add-bookings.
  */
 @Slf4j
+@Validated
 @Controller
 @RequestMapping("/bookings")
 @RequiredArgsConstructor
@@ -23,7 +25,7 @@ public class BookingController {
 
     @PostMapping
     public ResponseEntity<Object> createBooking(@RequestHeader(Constants.X_SHARER_USER_ID) @Min(value = 1) Long userId,
-                                                @Validated @RequestBody NewBookingRequest newBookingRequest) {
+                                                @Valid @RequestBody NewBookingRequest newBookingRequest) {
         log.info("Полученное тело запроса на создание бронирования: {}", newBookingRequest.toString());
         return bookingClient.bookItem(userId, newBookingRequest);
     }

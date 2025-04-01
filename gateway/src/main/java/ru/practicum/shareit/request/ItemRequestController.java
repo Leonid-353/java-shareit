@@ -1,5 +1,6 @@
 package ru.practicum.shareit.request;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import ru.practicum.shareit.request.dto.NewItemRequestDto;
  * TODO Sprint add-item-requests.
  */
 @Slf4j
+@Validated
 @Controller
 @RequestMapping(path = "/requests")
 @RequiredArgsConstructor
@@ -21,7 +23,7 @@ public class ItemRequestController {
     final ItemRequestClient itemRequestClient;
 
     @PostMapping
-    public ResponseEntity<Object> createItemRequest(@Validated @RequestBody NewItemRequestDto newItemRequestDto,
+    public ResponseEntity<Object> createItemRequest(@Valid @RequestBody NewItemRequestDto newItemRequestDto,
                                                     @RequestHeader(Constants.X_SHARER_USER_ID)
                                                     @Min(value = 1) Long userId) {
         log.info("Полученное тело запроса на создания запроса вещи: {}", newItemRequestDto.toString());
